@@ -1,12 +1,20 @@
 """Sensor platform for integration_blueprint."""
 from .const import DEFAULT_NAME, DOMAIN, ICON, SENSOR
 from .entity import IntegrationBlueprintEntity
+from .supervisorSensor import SupervisorSensor
+
+import pprint
 
 
 async def async_setup_entry(hass, entry, async_add_devices):
     """Setup sensor platform."""
     coordinator = hass.data[DOMAIN][entry.entry_id]
-    async_add_devices([IntegrationBlueprintSensor(coordinator, entry)])
+
+    devices = []
+    # devices.append(IntegrationBlueprintSensor(coordinator, entry))
+    devices.append(SupervisorSensor(coordinator, entry))
+
+    async_add_devices(devices)
 
 
 class IntegrationBlueprintSensor(IntegrationBlueprintEntity):
@@ -20,7 +28,12 @@ class IntegrationBlueprintSensor(IntegrationBlueprintEntity):
     @property
     def state(self):
         """Return the state of the sensor."""
-        return self.coordinator.data.get("body")
+        return (
+            "Healthy"
+            if self.coordinator.data.get("data").get("healthy") == True
+            else "Not healthy"
+        )
+        # return self.coordinator.data.get("body")
 
     @property
     def icon(self):

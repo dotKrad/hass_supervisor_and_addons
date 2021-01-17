@@ -5,6 +5,7 @@ import socket
 from typing import Optional
 import aiohttp
 import async_timeout
+import os
 
 TIMEOUT = 10
 
@@ -24,9 +25,15 @@ class IntegrationBlueprintApiClient:
         self._session = session
 
     async def async_get_data(self) -> dict:
+        # token = os.environ.get("SUPERVISOR_TOKEN")  # None
+        token = os.environ.get("PYTHON_GET_PIP_SHA256")  # None
+
         """Get data from the API."""
-        url = "https://jsonplaceholder.typicode.com/posts/1"
-        return await self.api_wrapper("get", url)
+        # url = "https://jsonplaceholder.typicode.com/posts/1"
+        url = "http://10.10.10.6:3000/supervisor/info"
+        headers = {"Authorization": f"Bearer {token}"}
+
+        return await self.api_wrapper("get", url, headers=headers)
 
     async def async_set_title(self, value: str) -> None:
         """Get data from the API."""
