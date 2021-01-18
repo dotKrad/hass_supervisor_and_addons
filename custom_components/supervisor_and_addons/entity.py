@@ -16,7 +16,7 @@ class IntegrationBlueprintEntity(CoordinatorEntity):
     @property
     def device_info(self):
         return {
-            "identifiers": {(DOMAIN, self.unique_id)},
+            "identifiers": {(DOMAIN, "supervisor_and_addons_device")},
             "name": NAME,
             "model": VERSION,
             "manufacturer": NAME,
@@ -27,6 +27,6 @@ class IntegrationBlueprintEntity(CoordinatorEntity):
         """Return the state attributes."""
         return {
             "attribution": ATTRIBUTION,
-            # "id": str(self.coordinator.data.get("id")),
+            "id": "supervisor_and_addons_device",
             "integration": DOMAIN,
         }

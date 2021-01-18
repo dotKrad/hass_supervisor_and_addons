@@ -18,7 +18,7 @@ BINARY_SENSOR = "binary_sensor"
 SENSOR = "sensor"
 SWITCH = "switch"
 # PLATFORMS = [BINARY_SENSOR, SENSOR, SWITCH]
-PLATFORMS = [SENSOR]
+PLATFORMS = [BINARY_SENSOR, SENSOR]
 
 
 # Configuration and options

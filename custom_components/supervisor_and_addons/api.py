@@ -29,8 +29,8 @@ class IntegrationBlueprintApiClient:
         token = os.environ.get("PYTHON_GET_PIP_SHA256")  # None
 
         """Get data from the API."""
-        # url = "https://jsonplaceholder.typicode.com/posts/1"
-        url = "http://10.10.10.6:3000/supervisor/info"
+        url = "http://supervisor/supervisor/info"
+        # url = "http://10.10.10.6:3000/supervisor/info"
         headers = {"Authorization": f"Bearer {token}"}
 
         return await self.api_wrapper("get", url, headers=headers)
@@ -48,6 +48,10 @@ class IntegrationBlueprintApiClient:
             async with async_timeout.timeout(TIMEOUT, loop=asyncio.get_event_loop()):
                 if method == "get":
                     response = await self._session.get(url, headers=headers)
+                    if response.status != 200:
+                        _LOGGER.error("401")
+                        return None
+
                     return await response.json()
 
                 elif method == "put":

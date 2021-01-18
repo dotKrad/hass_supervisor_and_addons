@@ -12,10 +12,11 @@
             }
         },
         "error": {
-            "auth": "Username/Password is wrong."
+            "auth": "Username/Password is wrong.",
+            "nosupervisor": "Couldn't locate Supervisor"
         },
         "abort": {
-            "single_instance_allowed": "Only a single configuration of Blueprint is allowed."
+            "single_instance_allowed": "Only a single configuration is allowed."
         }
     },
     "options": {

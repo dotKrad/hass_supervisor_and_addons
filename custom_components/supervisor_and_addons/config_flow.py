@@ -28,19 +28,24 @@ class BlueprintFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         self._errors = {}
 
         # Uncomment the next 2 lines if only a single instance of the integration is allowed:
-        # if self._async_current_entries():
-        #     return self.async_abort(reason="single_instance_allowed")
+        if self._async_current_entries():
+            return self.async_abort(reason="single_instance_allowed")
 
         if user_input is not None:
-            valid = await self._test_credentials(
-                user_input[CONF_USERNAME], user_input[CONF_PASSWORD]
-            )
+            valid = False
+            try:
+                session = async_create_clientsession(self.hass)
+                client = IntegrationBlueprintApiClient("", "", session)
+                data = await client.async_get_data()
+                if data != None:
+                    valid = True
+            except Exception as exception:
+                print(exception)
+
             if valid:
-                return self.async_create_entry(
-                    title=user_input[CONF_USERNAME], data=user_input
-                )
+                return self.async_create_entry(title="Home", data={})
             else:
-                self._errors["base"] = "auth"
+                self._errors["base"] = "nosupervisor"
 
             return await self._show_config_form(user_input)
 
@@ -56,7 +61,9 @@ class BlueprintFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         return self.async_show_form(
             step_id="user",
             data_schema=vol.Schema(
-                {vol.Required(CONF_USERNAME): str, vol.Required(CONF_PASSWORD): str}
+                {
+                    # vol.Required(CONF_USERNAME): str, vol.Required(CONF_PASSWORD): str
+                }
             ),
             errors=self._errors,
         )
@@ -66,8 +73,9 @@ class BlueprintFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         try:
             session = async_create_clientsession(self.hass)
             client = IntegrationBlueprintApiClient(username, password, session)
-            await client.async_get_data()
-            return True
+            data = await client.async_get_data()
+            if data != None:
+                return True
         except Exception:  # pylint: disable=broad-except
             pass
         return False

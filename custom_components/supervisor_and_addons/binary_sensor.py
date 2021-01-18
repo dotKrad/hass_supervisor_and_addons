@@ -1,5 +1,6 @@
 """Binary sensor platform for integration_blueprint."""
 from homeassistant.components.binary_sensor import BinarySensorEntity
+from .addonSensor import AddonSensor
 
 from .const import (
     BINARY_SENSOR,
@@ -13,7 +14,17 @@ from .entity import IntegrationBlueprintEntity
 async def async_setup_entry(hass, entry, async_add_devices):
     """Setup binary_sensor platform."""
     coordinator = hass.data[DOMAIN][entry.entry_id]
-    async_add_devices([IntegrationBlueprintBinarySensor(coordinator, entry)])
+
+    devices = []
+
+    if coordinator.data != None:
+        for addon in coordinator.data.get("data").get("addons"):
+            print(addon["slug"])
+            devices.append(AddonSensor(coordinator, entry, addon["slug"]))
+
+    # async_add_devices([IntegrationBlueprintBinarySensor(coordinator, entry)])
+
+    async_add_devices(devices)
 
 
 class IntegrationBlueprintBinarySensor(IntegrationBlueprintEntity, BinarySensorEntity):

@@ -2,6 +2,7 @@
 from .const import DEFAULT_NAME, DOMAIN, ICON, SENSOR
 from .entity import IntegrationBlueprintEntity
 from .supervisorSensor import SupervisorSensor
+from .addonSensor import AddonSensor
 
 import pprint
 
@@ -13,6 +14,14 @@ async def async_setup_entry(hass, entry, async_add_devices):
     devices = []
     # devices.append(IntegrationBlueprintSensor(coordinator, entry))
     devices.append(SupervisorSensor(coordinator, entry))
+
+    async_add_devices(devices)
+    return
+
+    if coordinator.data != None:
+        for addon in coordinator.data.get("data").get("addons"):
+            print(addon["slug"])
+            devices.append(AddonSensor(coordinator, entry, addon["slug"]))
 
     async_add_devices(devices)
 
