@@ -27,6 +27,6 @@ class IntegrationBlueprintEntity(CoordinatorEntity):
         """Return the state attributes."""
         return {
             "attribution": ATTRIBUTION,
-            "id": "supervisor_and_addons_device",
-            "integration": DOMAIN,
+            # "id": "supervisor_and_addons_device",
+            "integration": NAME,
         }

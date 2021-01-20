@@ -25,12 +25,10 @@ class IntegrationBlueprintApiClient:
         self._session = session
 
     async def async_get_data(self) -> dict:
-        # token = os.environ.get("SUPERVISOR_TOKEN")  # None
-        token = os.environ.get("PYTHON_GET_PIP_SHA256")  # None
+        token = os.environ.get("SUPERVISOR_TOKEN")  # None
 
         """Get data from the API."""
         url = "http://supervisor/supervisor/info"
-        # url = "http://10.10.10.6:3000/supervisor/info"
         headers = {"Authorization": f"Bearer {token}"}
 
         return await self.api_wrapper("get", url, headers=headers)
@@ -47,7 +45,8 @@ class IntegrationBlueprintApiClient:
         try:
             async with async_timeout.timeout(TIMEOUT, loop=asyncio.get_event_loop()):
                 if method == "get":
-                    response = await self._session.get(url, headers=headers)
+                    response = await self._session.get(url)
+
                     if response.status != 200:
                         _LOGGER.error("401")
                         return None
