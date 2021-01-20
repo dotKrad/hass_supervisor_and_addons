@@ -21,13 +21,6 @@ async def async_setup_entry(hass, entry, async_add_devices):
     async_add_devices(devices)
     return
 
-    if coordinator.data != None:
-        for addon in coordinator.data.get("data").get("addons"):
-            print(addon["slug"])
-            devices.append(AddonSensor(coordinator, entry, addon["slug"]))
-
-    async_add_devices(devices)
-
 
 class IntegrationBlueprintSensor(IntegrationBlueprintEntity):
     """integration_blueprint Sensor class."""

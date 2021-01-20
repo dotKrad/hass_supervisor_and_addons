@@ -45,7 +45,7 @@ class IntegrationBlueprintApiClient:
         try:
             async with async_timeout.timeout(TIMEOUT, loop=asyncio.get_event_loop()):
                 if method == "get":
-                    response = await self._session.get(url)
+                    response = await self._session.get(url, headers=headers)
 
                     if response.status != 200:
                         _LOGGER.error("401")
