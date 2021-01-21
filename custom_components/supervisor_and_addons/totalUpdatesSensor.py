@@ -27,7 +27,12 @@ class TotalUpdatesSensor(IntegrationBlueprintEntity):
                 if addon["update_available"] == True:
                     total = total + 1
 
-        return f"{total} pending update(s)"
+        return total
+
+    @property
+    def unit_of_measurement(self) -> str:
+        """Return the unit of measurement of this entity, if any."""
+        return "pending update(s)"
 
     @property
     def icon(self):
